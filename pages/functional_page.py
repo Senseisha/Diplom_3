@@ -35,8 +35,21 @@ class FunctionalPage(BasePage):
         self.wait_for_element(FunctionalPageLocators.DETAILS)
 
     @allure.step('Получить текст окна с деталями')
-    def get_details_window_text(self, expected_text):
+    def get_details_popup_text(self, expected_text):
         actual_text = self.get_text_on_element(FunctionalPageLocators.DETAILS)
         return actual_text == expected_text
+
+    @allure.step('Нажать на крестик на окне с деталями')
+    def click_on_cross_button(self):
+        self.click_on_element(FunctionalPageLocators.CLOSE)
+
+    @allure.step('Проверить невидимость окна с деталями')
+    def check_popup_is_invisible(self):
+        return self.check_element_is_invisible(FunctionalPageLocators.DETAILS)
+
+    @allure.step('Добавить ингредиент в корзину')
+    def drag_and_drop_ingredient(self):
+        self.drag_drop(FunctionalPageLocators.INGREDIENT, FunctionalPageLocators.BASKET)
+
 
 

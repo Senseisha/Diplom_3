@@ -43,4 +43,4 @@ class RecoveryPasswordPage(BasePage):
 
     @allure.step('Подождать пока поле станет активным')
     def wait_for_activate(self):
-        self.wait_for_element(PasswordPageLocators.ACTIVE)
+        return self.wait_for_element(PasswordPageLocators.INPUT_ACTIVE).is_displayed()

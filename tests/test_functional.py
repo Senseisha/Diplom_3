@@ -22,10 +22,21 @@ class TestMainFunctional:
         assert driver.current_url == main_site + '/'
 
     @allure.title('Тест успешного появления окна с деталями при клике на ингредиент')
-    def test_appears_window_with_details(self, driver):
-        details_window = FunctionalPage(driver)
-        details_window.main_page_loading_wait()
-        details_window.click_on_ingredient()
-        details_window.wait_for_window_with_details()
+    def test_appears_window_with_details(self, driver, popup_with_details):
+        details_popup = FunctionalPage(driver)
+        assert details_popup.get_details_popup_text('Детали ингредиента')
 
-        assert details_window.get_details_window_text('Детали ингредиента')
+    @allure.title('Тест успешного закрытия окна нажатием на крестик')
+    def test_close_window(self, driver, popup_with_details):
+        close_popup = FunctionalPage(driver)
+        close_popup.click_on_cross_button()
+        assert close_popup.check_popup_is_invisible() is False
+
+    # @allure.title('Тест проверки увеличения каунтера при добавлении ингредиента в заказ')
+    # def test_count_increase(self, driver):
+    #     counter = FunctionalPage(driver)
+    #     counter.main_page_loading_wait()
+    #     counter.drag_drop()
+
+
+

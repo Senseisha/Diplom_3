@@ -24,4 +24,4 @@ class TestRecoveryPassword:
         activate_field.click_on_button_restore()
         activate_field.wait_for_password()
         activate_field.click_on_button_eye()
-        assert activate_field.wait_for_activate is True
+        assert activate_field.wait_for_activate() is True

@@ -36,7 +36,18 @@ class BasePage:
     def wait_for_element_hide(self, locator, timeout=10):
         WebDriverWait(self.driver, timeout).until(EC.invisibility_of_element_located(locator))
 
-    @allure.step("Перетащить элемент в корзину")
-    def drag_and_drop_element(self, source, target):
-        drag_and_drop(self.driver, source, target)
+    @allure.step("Проверить, что элемент невидим")
+    def check_element_is_invisible(self, locator, timeout=10):
+        WebDriverWait(self.driver, timeout).until(EC.invisibility_of_element(locator))
+        return self.driver.find_element(*locator).is_displayed()
 
+
+    # @allure.step("Перетащить элемент в корзину")
+    # def drag_and_drop_element(self, source, target):
+    #     drag_and_drop(self.driver, source, target)
+
+    @allure.step("Перетащить элемент в корзину")
+    def drag_drop(self, first_locator, second_locator):
+        drag = self.driver.find_element(*first_locator)
+        drop = self.driver.find_element(*second_locator)
+        self.driver.drag_and_drop(drag, drop)
