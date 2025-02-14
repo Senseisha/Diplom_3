@@ -35,9 +35,8 @@ class FunctionalPage(BasePage):
         self.wait_for_element(FunctionalPageLocators.DETAILS)
 
     @allure.step('Получить текст окна с деталями')
-    def get_details_popup_text(self, expected_text):
-        actual_text = self.get_text_on_element(FunctionalPageLocators.DETAILS)
-        return actual_text == expected_text
+    def get_details_popup_text(self):
+        return self.get_text_on_element(FunctionalPageLocators.DETAILS)
 
     @allure.step('Нажать на крестик на окне с деталями')
     def click_on_cross_button(self):
@@ -49,7 +48,17 @@ class FunctionalPage(BasePage):
 
     @allure.step('Добавить ингредиент в корзину')
     def drag_and_drop_ingredient(self):
-        self.drag_drop(FunctionalPageLocators.INGREDIENT, FunctionalPageLocators.BASKET)
+        return self.drag_drop(FunctionalPageLocators.INGREDIENT, FunctionalPageLocators.BASKET)
 
+    @allure.step('Получить значение каунтера ингредиента')
+    def get_ingredient_count(self):
+        return self.get_text_on_element(FunctionalPageLocators.COUNTER)
 
+    @allure.step('Кликнуть на элемент "Оформить заказ"')
+    def click_on_button_ordering(self):
+        self.click_on_element(FunctionalPageLocators.PLACE_AN_ORDER)
+
+    @allure.step('Получить текст об успешном оформлении заказа')
+    def get_ordering_popup_text(self):
+        return self.get_text_on_element(FunctionalPageLocators.PREPARES_ORDER)
 

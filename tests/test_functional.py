@@ -24,7 +24,7 @@ class TestMainFunctional:
     @allure.title('Тест успешного появления окна с деталями при клике на ингредиент')
     def test_appears_window_with_details(self, driver, popup_with_details):
         details_popup = FunctionalPage(driver)
-        assert details_popup.get_details_popup_text('Детали ингредиента')
+        assert details_popup.get_details_popup_text() == 'Детали ингредиента'
 
     @allure.title('Тест успешного закрытия окна нажатием на крестик')
     def test_close_window(self, driver, popup_with_details):
@@ -35,8 +35,19 @@ class TestMainFunctional:
     # @allure.title('Тест проверки увеличения каунтера при добавлении ингредиента в заказ')
     # def test_count_increase(self, driver):
     #     counter = FunctionalPage(driver)
-    #     counter.main_page_loading_wait()
-    #     counter.drag_drop()
+    #     initial_count = counter.main_page_loading_wait()
+    #     counter.get_ingredient_count('0')
+    #     counter.drag_and_drop_ingredient()
+    #     current_count = counter.get_ingredient_count('2')
+    #     assert initial_count > current_count
+
+    @allure.title('Тест успешного оформления заказа залогиненным пользователем')
+    def test_successful_ordering(self, driver):
+        #логин
+        order = FunctionalPage(driver)
+        order.drag_and_drop_ingredient()
+        order.click_on_button_ordering()
+        assert order.get_ordering_popup_text('Ваш заказ начали готовить')
 
 
 

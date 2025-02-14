@@ -8,9 +8,10 @@ from pages.personal_account_page import PersonalAccount
 from pages.functional_page import FunctionalPage
 from generator import register_new_user
 
+
 # @pytest.fixture(params=["chrome"])
-# @pytest.fixture(params=["firefox"])
-@pytest.fixture(params=["chrome", "firefox"])
+@pytest.fixture(params=["firefox"])
+# @pytest.fixture(params=["chrome", "firefox"])
 def driver(request):
     if request.param == "chrome":
         driver = webdriver.Chrome()
@@ -35,22 +36,38 @@ def recovery_password(driver):
     return driver
 
 
-# Фикстура ввода почты и клика по кнопке "Восстановить"
-@pytest.fixture
-def filling_email_field(recovery_password):
-    email_field = RecoveryPasswordPage(driver)
-    email_field.send_field_email(Credentials.email)
-    email_field.click_on_button_restore()
-    email_field.wait_for_password()
+# Фикстура создания пользователя через API
+@pytest.fixture()
+def create_and_delete_user(generate_users_data):
+    email = generate_users_data['email']
+    password = generate_users_data['password']
+    response = requests.post(f'{UrlForCreate.BASE_URL}{UrlForCreate.CREATE_URL}', data=generate_users_data)
+    access_token = response.json().get('accessToken')
+    yield [email, password]
+    requests.delete(f'{UrlForCreate.BASE_URL}{UrlForCreate.DELETE_URL}', headers={
+        "Authorization": access_token})
 
 
+# Фикстура перехода в личный кабинет
 @pytest.fixture
 def transition_to_personal_account(driver):
     driver = PersonalAccount(driver)
     driver.main_page_loading_wait()
     driver.click_on_order_to_account()
-    # driver.wait_for_entry()
     return driver
+
+
+# Фикстура логина пользователя
+@pytest.fixture
+def login_user(driver, create_and_delete_user, transition_to_personal_account):
+    email = create_and_delete_user[0]
+    password = create_and_delete_user[1]
+    login = PersonalAccount(driver)
+    login.send_email(email)
+    login.send_password(password)
+    login.click_on_enter()
+    login.main_page_loading_wait()
+    return login
 
 
 # Фикстура для проверки функционала (окно с деталями)
@@ -77,40 +94,3 @@ def popup_with_details(driver):
 def generate_users_data():
     create_users_body = register_new_user()
     return create_users_body
-
-
-@pytest.fixture()
-def create_login_delete_user(generate_users_data):
-    email = generate_users_data['email']
-    password = generate_users_data['password']
-    response = requests.post(f'{UrlForCreateAndLogin.BASE_URL}{UrlForCreateAndLogin.CREATE_URL}', data=body)
-    # UserMethods().create_user(generate_users_data)
-    user_login = requests.post(f'{UrlForCreateAndLogin.BASE_URL}{UrlForCreateAndLogin.LOGIN_URL}', data=payload)
-    # user_login = UserMethods().login_user(email, password)
-    user_token = user_login.json().get('accessToken')
-    yield [user_login, user_token]
-
-    delete_user = requests.delete(f'{UrlForCreateAndLogin.BASE_URL}{UrlForCreateAndLogin.DELETE_URL}', headers={
-        "Authorization": access_token})
-    # UserMethods().delete_user(user_token)
-
-
-@pytest.fixture
-def revert_user():
-    credentials = {
-        'email': Credentials.email,
-        'password': Credentials.password
-    }
-
-    response = requests.post(auth_endpoint, json=credentials)
-    token = response.json().get('token')
-
-    headers = {
-        'Authorization': f'Bearer {token}',
-        'Content-Type': 'application/json'
-    }
-    update_data = {
-        'user': default_user_url
-    }
-    requests.patch(user_update_endpoint, json=update_data, headers=headers)
-    yield

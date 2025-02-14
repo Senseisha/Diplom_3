@@ -13,6 +13,18 @@ class PersonalAccount(BasePage):
     def click_on_order_to_account(self):
         self.click_on_element(PersonalAccountPageLocators.PERSONAL_ACCOUNT)
 
+    @allure.step('Заполнить поле email')
+    def send_email(self, email):
+        self.send_keys_to_input(PersonalAccountPageLocators.EMAIL, email)
+
+    @allure.step('Заполнить поле пароль')
+    def send_password(self, password):
+        self.send_keys_to_input(PersonalAccountPageLocators.PASSWORD, password)
+
+    @allure.step('Кликнуть на элемент "Войти"')
+    def click_on_enter(self):
+        self.click_on_element(PersonalAccountPageLocators.ENTER)
+
     @allure.step('Подождать перехода на страницу профиля')
     def wait_for_entry(self):
         self.wait_for_element(PersonalAccountPageLocators.PROFILE)
@@ -26,8 +38,9 @@ class PersonalAccount(BasePage):
         self.wait_for_element(PersonalAccountPageLocators.ORDER_HISTORY)
 
     @allure.step('Кликнуть на элемент "Выход"')
-    def click_on_exit(self):
-        self.click_on_element(PersonalAccountPageLocators.EXIT)
+    def click_on_button_exit(self):
+        if self.check_element_is_invisible(MainPageLocators.MODAL) is False:
+            self.click_on_element(PersonalAccountPageLocators.BUTTON_EXIT)
 
     @allure.step('Дождаться перехода на главную страницу')
     def wait_to_go_to_main_page(self):
