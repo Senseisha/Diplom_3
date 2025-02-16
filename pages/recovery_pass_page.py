@@ -39,6 +39,7 @@ class RecoveryPasswordPage(BasePage):
 
     @allure.step('Кликнуть на кнопку "показать/скрыть пароль"')
     def click_on_button_eye(self):
+        self.check_element_is_invisible(MainPageLocators.OVERLAY)
         self.click_on_element(PasswordPageLocators.EYE_BUTTON)
 
     @allure.step('Подождать пока поле станет активным')

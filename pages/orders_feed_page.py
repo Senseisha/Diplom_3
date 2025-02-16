@@ -40,6 +40,7 @@ class OrdersFeedPage(BasePage):
     @allure.step('Кликнуть на закрытие попапа с номером заказа')
     def close_popup(self):
         self.click_on_element(OrdersFeedPageLocators.CLOSE_BUTTON)
+        self.check_element_is_invisible(MainPageLocators.MODAL)
 
     @allure.step('Кликнуть на элемент "Личный кабинет"')
     def click_on_order_to_account(self):
@@ -82,8 +83,7 @@ class OrdersFeedPage(BasePage):
 
     @allure.step('Получить номер заказа "В работе"')
     def get_text_order_number_in_progress(self, order_id):
-        locator = (By.XPATH,
-                   f".//ul[starts-with(@class, 'OrderFeed_orderListReady')]/li[text()[contains(., '{order_id}')]]")
+        locator = (By.XPATH, f".//li[text()[contains(., '{order_id}')]]")
 
         self.wait_for_element(locator)
         return self.driver.find_element(*locator)

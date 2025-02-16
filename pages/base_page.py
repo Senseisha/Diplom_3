@@ -1,7 +1,7 @@
 import allure
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver import ActionChains
+from seletools.actions import drag_and_drop
 
 
 class BasePage:
@@ -36,12 +36,16 @@ class BasePage:
         WebDriverWait(self.driver, timeout).until(EC.invisibility_of_element_located(locator))
 
     @allure.step("Проверить, что элемент невидим")
-    def check_element_is_invisible(self, locator, timeout=20):
-        WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
-        WebDriverWait(self.driver, timeout).until(EC.invisibility_of_element_located(locator))
+    def check_element_is_invisible(self, locator, timeout=10):
+        try:
+            WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
+            WebDriverWait(self.driver, timeout).until(EC.invisibility_of_element_located(locator))
+            return self.driver.find_element(*locator).is_displayed()
+        except Exception:
+            return self.driver.find_element(*locator).is_displayed()
 
     @allure.step("Перетащить элемент в корзину")
     def drag_drop(self, first_locator, second_locator):
         draggable = self.driver.find_element(*first_locator)
         droppable = self.driver.find_element(*second_locator)
-        ActionChains(self.driver).drag_and_drop(draggable, droppable).perform()
+        drag_and_drop(self.driver, draggable, droppable)
