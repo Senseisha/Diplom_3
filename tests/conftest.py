@@ -2,16 +2,13 @@ import pytest
 import requests
 from selenium import webdriver
 from curl import *
-from data import Credentials
 from pages.recovery_pass_page import RecoveryPasswordPage
 from pages.personal_account_page import PersonalAccount
 from pages.functional_page import FunctionalPage
 from generator import register_new_user
 
 
-# @pytest.fixture(params=["chrome"])
-@pytest.fixture(params=["firefox"])
-# @pytest.fixture(params=["chrome", "firefox"])
+@pytest.fixture(params=["chrome", "firefox"])
 def driver(request):
     if request.param == "chrome":
         driver = webdriver.Chrome()
@@ -79,16 +76,6 @@ def popup_with_details(driver):
     driver.wait_for_window_with_details()
     return driver
 
-
-"Фикстура с добавлением ингредиентов в корзину"
-
-
-# @pytest.fixture(driver)
-# def drag_drop(self):
-#     self.main_page_loading_wait()
-#     ingredient = self.find_element_with_wait(locator = ing_locator)
-#     basket = self.find_element_with_wait(locator = basket_locator)
-#     self.drag_and_dropElement(sourse = ingredient, target = basket)
 
 @pytest.fixture
 def generate_users_data():

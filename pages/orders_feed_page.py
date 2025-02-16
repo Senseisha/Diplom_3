@@ -4,6 +4,7 @@ from locators.main_page_locators import MainPageLocators
 from locators.personal_account_page_locators import PersonalAccountPageLocators
 from locators.functional_page_locators import FunctionalPageLocators
 from locators.orders_feed_page_locators import OrdersFeedPageLocators
+from selenium.webdriver.common.by import By
 
 
 class OrdersFeedPage(BasePage):
@@ -22,7 +23,7 @@ class OrdersFeedPage(BasePage):
 
     @allure.step('Дождаться появления окна с деталями')
     def wait_for_popup_with_details(self):
-        self.wait_for_element(OrdersFeedPageLocators.DETAILS_POPUP)
+        return self.wait_for_element(OrdersFeedPageLocators.DETAILS_POPUP)
 
     @allure.step('Добавить ингредиент в корзину')
     def drag_and_drop_ingredient(self):
@@ -33,7 +34,7 @@ class OrdersFeedPage(BasePage):
         self.click_on_element(FunctionalPageLocators.PLACE_AN_ORDER)
 
     @allure.step('Получить текст об успешном оформлении заказа')
-    def get_ordering_popup_text(self, expected_text):
+    def get_ordering_popup_text(self):
         return self.get_text_on_element(FunctionalPageLocators.PREPARES_ORDER)
 
     @allure.step('Кликнуть на закрытие попапа с номером заказа')
@@ -45,7 +46,7 @@ class OrdersFeedPage(BasePage):
         self.click_on_element(PersonalAccountPageLocators.PERSONAL_ACCOUNT)
 
     @allure.step('Подождать перехода на страницу профиля')
-    def wait_for_entry(self):
+    def wait_for_entry_to_profile(self):
         self.wait_for_element(PersonalAccountPageLocators.PROFILE)
 
     @allure.step('Кликнуть на элемент "История заказов"')
@@ -54,12 +55,35 @@ class OrdersFeedPage(BasePage):
 
     @allure.step('Получить текст oб исходном количестве заказов')
     def get_initial_count(self, locator):
+        self.wait_for_element(locator)
         return self.get_text_on_element(locator)
 
     @allure.step('Кликнуть на раздел "Конструктор"')
     def click_on_constructor(self):
         self.click_on_element(FunctionalPageLocators.CONSTRUCTOR)
 
+    @allure.step('Подождать видимости элемента с номером заказа')
+    def wait_for_order_number(self):
+        self.check_element_is_invisible(MainPageLocators.OVERLAY)
+
+    @allure.step('Получить текст номера заказа')
+    def get_order_number_text(self):
+        return self.get_text_on_element(OrdersFeedPageLocators.ORDER_NUMBER_TEXT)
+
+    @allure.step('Проверить наличие номера заказа в истории заказов')
+    def is_order_id_in_history_list(self, order_id):
+        self.wait_for_element(OrdersFeedPageLocators.ORDER_HISTORY_LIST)
+        return self.check_element_existence((By.XPATH, f".//p[text()='#0{order_id}']"))
+
+    @allure.step('Проверить наличие номера заказа в истории заказов')
+    def is_order_id_in_feed_list(self, order_id):
+        self.wait_for_element(OrdersFeedPageLocators.ORDER_FEED_LIST)
+        return self.check_element_existence((By.XPATH, f".//p[text()='#0{order_id}']"))
+
     @allure.step('Получить номер заказа "В работе"')
-    def get_text_order_number_in_progress(self):
-        return self.get_text_on_element(OrdersFeedPageLocators.ORDER_NUMBER_IN_PROGRESS)
+    def get_text_order_number_in_progress(self, order_id):
+        locator = (By.XPATH,
+                   f".//ul[starts-with(@class, 'OrderFeed_orderListReady')]/li[text()[contains(., '{order_id}')]]")
+
+        self.wait_for_element(locator)
+        return self.driver.find_element(*locator)

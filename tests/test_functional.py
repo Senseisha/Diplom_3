@@ -32,22 +32,22 @@ class TestMainFunctional:
         close_popup.click_on_cross_button()
         assert close_popup.check_popup_is_invisible() is False
 
-    # @allure.title('Тест проверки увеличения каунтера при добавлении ингредиента в заказ')
-    # def test_count_increase(self, driver):
-    #     counter = FunctionalPage(driver)
-    #     initial_count = counter.main_page_loading_wait()
-    #     counter.get_ingredient_count('0')
-    #     counter.drag_and_drop_ingredient()
-    #     current_count = counter.get_ingredient_count('2')
-    #     assert initial_count > current_count
+    @allure.title('Тест проверки увеличения каунтера при добавлении ингредиента в заказ')
+    def test_count_increase(self, driver):
+        counter = FunctionalPage(driver)
+        counter.main_page_loading_wait()
+        initial_count = counter.get_ingredient_count()
+        counter.drag_and_drop_ingredient()
+        current_count = counter.get_ingredient_count()
+        assert int(initial_count) < int(current_count)
 
     @allure.title('Тест успешного оформления заказа залогиненным пользователем')
-    def test_successful_ordering(self, driver):
-        #логин
+    def test_successful_ordering(self, driver, login_user):
         order = FunctionalPage(driver)
+        order.main_page_loading_wait()
         order.drag_and_drop_ingredient()
         order.click_on_button_ordering()
-        assert order.get_ordering_popup_text('Ваш заказ начали готовить')
+        assert order.get_ordering_popup_text() == 'Ваш заказ начали готовить'
 
 
 

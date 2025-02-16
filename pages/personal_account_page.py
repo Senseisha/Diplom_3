@@ -39,8 +39,8 @@ class PersonalAccount(BasePage):
 
     @allure.step('Кликнуть на элемент "Выход"')
     def click_on_button_exit(self):
-        if self.check_element_is_invisible(MainPageLocators.MODAL) is False:
-            self.click_on_element(PersonalAccountPageLocators.BUTTON_EXIT)
+        self.check_element_is_invisible(MainPageLocators.MODAL)
+        self.click_on_element(PersonalAccountPageLocators.BUTTON_EXIT)
 
     @allure.step('Дождаться перехода на главную страницу')
     def wait_to_go_to_main_page(self):
