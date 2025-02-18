@@ -1,1 +1,0 @@
-{"name": "Тест успешного перехода в Личный кабинет", "status": "skipped", "parameters": [{"name": "driver", "value": "'firefox'"}], "start": 1739728752996, "stop": 1739728752996, "uuid": "7319693d-206f-44a3-97e0-e800fcc914cd", "testCaseId": "92a1e3198819676ad856f50a0868c5e8", "fullName": "tests.test_personal_account.TestPersonalAccount#test_successful_transition"}
