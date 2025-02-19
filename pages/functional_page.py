@@ -62,3 +62,5 @@ class FunctionalPage(BasePage):
     def get_ordering_popup_text(self):
         return self.get_text_on_element(FunctionalPageLocators.PREPARES_ORDER)
 
+
+

@@ -7,7 +7,9 @@ from pages.recovery_pass_page import RecoveryPasswordPage
 class TestRecoveryPassword:
     @allure.title('Тест успешного перехода на страницу восстановления пароля по кнопке "Восстановить пароль"')
     def test_success_entry_with_button_recover_password(self, driver, recovery_password):
-        assert driver.current_url == forgot_pass
+        recovery = RecoveryPasswordPage(driver)
+        current_url = recovery.get_current_url()
+        assert current_url == forgot_pass
 
     @allure.title('Тест успешного ввода почты и клика по кнопке "Восстановить"')
     def test_success_send_email(self, driver, recovery_password):
@@ -15,7 +17,8 @@ class TestRecoveryPassword:
         recovery.send_field_email(Credentials.email)
         recovery.click_on_button_restore()
         recovery.wait_for_password()
-        assert driver.current_url == reset_password
+        current_url = recovery.get_current_url()
+        assert current_url == reset_password
 
     @allure.title('Тест успешной активации поля с паролем кликом по кнопке показать/скрыть пароль')
     def test_activate_field(self, driver, recovery_password):

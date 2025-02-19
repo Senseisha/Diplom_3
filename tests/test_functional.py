@@ -11,7 +11,8 @@ class TestMainFunctional:
         orders_feed.main_page_loading_wait()
         orders_feed.click_on_orders_feed()
         orders_feed.wait_for_orders_feed()
-        assert driver.current_url == feed_orders
+        current_url = orders_feed.get_current_url()
+        assert current_url == feed_orders
 
     @allure.title('Тест успешного перехода в раздел "Конструктор"')
     def test_successful_transition_to_constructor(self, driver):
@@ -20,7 +21,8 @@ class TestMainFunctional:
         constructor.click_on_orders_feed()
         constructor.click_on_constructor()
         constructor.wait_for_section_constructor()
-        assert driver.current_url == main_site + '/'
+        current_url = constructor.get_current_url()
+        assert current_url == main_site + '/'
 
     @allure.title('Тест успешного появления окна с деталями при клике на ингредиент')
     def test_appears_window_with_details(self, driver, popup_with_details):

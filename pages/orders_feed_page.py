@@ -86,4 +86,4 @@ class OrdersFeedPage(BasePage):
         locator = (By.XPATH, f".//li[text()[contains(., '{order_id}')]]")
 
         self.wait_for_element(locator)
-        return self.driver.find_element(*locator)
+        return self.get_element(locator)

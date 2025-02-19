@@ -27,6 +27,10 @@ class BasePage:
         element.send_keys(value)
 
     @allure.step("Получить текст элемента")
+    def get_element(self, locator):
+        return self.driver.find_element(*locator)
+
+    @allure.step("Получить текст элемента")
     def get_text_on_element(self, locator):
         element = self.driver.find_element(*locator).text
         return element
@@ -49,3 +53,8 @@ class BasePage:
         draggable = self.driver.find_element(*first_locator)
         droppable = self.driver.find_element(*second_locator)
         drag_and_drop(self.driver, draggable, droppable)
+
+    @allure.step('Получить текущую ссылку')
+    def get_current_url(self):
+        current_url = self.driver.current_url
+        return current_url
