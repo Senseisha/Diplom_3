@@ -1,4 +1,5 @@
 import allure
+import data
 from curl import *
 from pages.functional_page import FunctionalPage
 
@@ -24,7 +25,7 @@ class TestMainFunctional:
     @allure.title('Тест успешного появления окна с деталями при клике на ингредиент')
     def test_appears_window_with_details(self, driver, popup_with_details):
         details_popup = FunctionalPage(driver)
-        assert details_popup.get_details_popup_text() == 'Детали ингредиента'
+        assert details_popup.get_details_popup_text() == data.details
 
     @allure.title('Тест успешного закрытия окна нажатием на крестик')
     def test_close_window(self, driver, popup_with_details):
@@ -47,7 +48,7 @@ class TestMainFunctional:
         order.main_page_loading_wait()
         order.drag_and_drop_ingredient()
         order.click_on_button_ordering()
-        assert order.get_ordering_popup_text() == 'Ваш заказ начали готовить'
+        assert order.get_ordering_popup_text() == data.prepared_order
 
 
 
